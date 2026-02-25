@@ -74,7 +74,10 @@ git push -u origin main
    | `CLOUDINARY_API_KEY` | From Cloudinary → API Keys | Used by the function only |
    | `CLOUDINARY_API_SECRET` | From Cloudinary → API Keys | Used by the function only |
 
-   Add them for **All scopes** (or at least Production).  
+   Add them for **All scopes** (or at least Production).
+
+   **If the build fails with "Secrets scanning detected secrets":** Netlify flags `VITE_CLOUDINARY_*` values in the build (they’re in the client by design). Add one more variable so the scanner allows them: **Key:** `SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES`, **Value:** your cloud name and preset name comma-separated, e.g. `dxvqey8bl,PassVitian`. The repo’s `netlify.toml` may already set this; if your cloud or preset name is different, set this in Netlify with your actual values.
+
    Then trigger a new deploy: **Deploys** → **Trigger deploy** → **Deploy site**.
 
 4. **Wait for the build**  

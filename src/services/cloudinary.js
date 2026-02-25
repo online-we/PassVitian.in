@@ -26,9 +26,16 @@ export async function uploadFile(file, metadata) {
     method: 'POST',
     body: formData,
   })
+  const text = await res.text()
   if (!res.ok) {
-    const err = await res.text()
-    throw new Error(err || 'Upload failed')
+    let message = 'Upload failed'
+    try {
+      const json = JSON.parse(text)
+      if (json?.error?.message) message = json.error.message
+    } catch {
+      if (text) message = text
+    }
+    throw new Error(message)
   }
-  return res.json()
+  return JSON.parse(text)
 }
