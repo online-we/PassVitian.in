@@ -18,7 +18,6 @@ export default function Home() {
           <div className="hidden text-center p-8 text-gray-500">
             <p className="text-lg font-semibold text-primary">Mid-term & Term-end</p>
             <p className="text-primary underline mt-1">For VIT Bhopal Campus</p>
-            <p className="text-sm mt-4">Upload your hero image as <code className="bg-gray-100 px-1 rounded">public/hero-card.png</code></p>
           </div>
         </div>
 
