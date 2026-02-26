@@ -5,7 +5,7 @@
   [build.environment]
   # VITE_* Cloudinary vars are public by design (client upload). Don't treat them as secrets.
   SECRETS_SCAN_OMIT_KEYS = "VITE_CLOUDINARY_CLOUD_NAME,VITE_CLOUDINARY_UPLOAD_PRESET"
-  SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES = "PassVitian,dxvqey8bl"
+  SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES = "PassVitian,your-cloud-name-here"
 
 [[redirects]]
   from = "/*"
