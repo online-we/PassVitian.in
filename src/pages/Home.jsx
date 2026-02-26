@@ -4,9 +4,9 @@ import heroCardImage from '../assets/hero-card.png'
 export default function Home() {
   return (
     <section className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-      <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
+      <div className="grid md:grid-cols-2 gap-6 md:gap-0 items-stretch">
         {/* Left: Hero image card */}
-        <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-lg bg-gradient-to-r from-gray-50 to-white min-h-[280px] flex items-center justify-center">
+        <div className="rounded-2xl md:rounded-l-2xl md:rounded-tr-none md:rounded-br-none overflow-hidden border border-gray-200 shadow-lg bg-gradient-to-r from-gray-50 to-white min-h-[280px] md:min-h-0 h-full flex items-center justify-center">
           <img
             src={heroCardImage}
             alt="Mid-term & Term-end for VIT Bhopal Campus"
@@ -23,7 +23,7 @@ export default function Home() {
         </div>
 
         {/* Right: CTA card */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-6 sm:p-8">
+        <div className="bg-white rounded-2xl md:rounded-r-2xl md:rounded-tl-none md:rounded-bl-none border border-gray-200 shadow-lg p-6 sm:p-8 h-full flex flex-col">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             Previous Semester Papers
           </h1>
@@ -40,7 +40,7 @@ export default function Home() {
           </ul>
           <Link
             to="/papers"
-            className="mt-6 inline-block px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-light transition shadow-md"
+            className="mt-auto pt-6 inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-light transition shadow-md w-fit leading-none"
           >
             View Papers
           </Link>
