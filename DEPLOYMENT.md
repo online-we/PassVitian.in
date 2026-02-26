@@ -76,7 +76,7 @@ git push -u origin main
 
    Add them for **All scopes** (or at least Production).
 
-   **If the build fails with "Secrets scanning detected secrets":** Netlify flags `VITE_CLOUDINARY_*` values in the build (they’re in the client by design). Add one more variable so the scanner allows them: **Key:** `SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES`, **Value:** your cloud name and preset name comma-separated, e.g. `dxvqey8bl,PassVitian`. The repo’s `netlify.toml` may already set this; if your cloud or preset name is different, set this in Netlify with your actual values.
+   **If the build fails with "Secrets scanning detected secrets":** In Netlify, do **not** mark `VITE_CLOUDINARY_CLOUD_NAME` or `VITE_CLOUDINARY_UPLOAD_PRESET` as "Contains secret values" — they are public by design (client uploads). Only mark `CLOUDINARY_API_KEY` and `CLOUDINARY_API_SECRET` as secret. The repo’s `netlify.toml` already sets `SECRETS_SCAN_OMIT_KEYS` so those two are excluded from scanning.
 
    Then trigger a new deploy: **Deploys** → **Trigger deploy** → **Deploy site**.
 

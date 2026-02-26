@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom'
+import heroCardImage from '../assets/hero-card.png'
 
 export default function Home() {
   return (
     <section className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
-        {/* Left: Hero image card – replace src with your uploaded image path */}
+        {/* Left: Hero image card */}
         <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-lg bg-gradient-to-r from-gray-50 to-white min-h-[280px] flex items-center justify-center">
           <img
-            src="/hero-card.png"
+            src={heroCardImage}
             alt="Mid-term & Term-end for VIT Bhopal Campus"
             className="w-full h-full object-cover object-center"
             onError={(e) => {
