@@ -26,6 +26,11 @@ Follow these steps in order so students can find the site on Google and upload/v
    Dashboard → **Settings** → **API Keys**  
    Copy **API Key** and **API Secret**. You’ll add these only in Netlify, not in your code.
 
+5. **Allow PDF delivery (required for papers to open)**  
+   Dashboard → **Settings** → **Security**  
+   Under **PDF and ZIP files delivery**, check **Allow delivery of PDF and ZIP files**.  
+   Click **Save**. Without this, PDFs upload but won’t open when students click “GET PDF”.
+
 ---
 
 ## Step 2: Put the project in Git (if you haven’t)
@@ -125,6 +130,7 @@ git push -u origin main
 
 - [ ] Cloudinary account + cloud name noted  
 - [ ] Unsigned upload preset created (Image + Raw)  
+- [ ] **Security → Allow delivery of PDF and ZIP files** checked  
 - [ ] API Key & Secret copied (for Netlify only)  
 - [ ] Repo on GitHub and pushed  
 - [ ] Netlify site created from that repo  
