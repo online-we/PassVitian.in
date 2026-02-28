@@ -94,6 +94,49 @@ git push -u origin main
 
 ## Step 4: (Optional) Connect a custom domain
 
+### Connecting passvitian.in (Hostinger) to Netlify
+
+**Part A – In Netlify**
+
+1. Go to your site → **Domain management** (left sidebar).
+2. Under **Add your existing custom domain**, type **`passvitian.in`** in **Custom domain or subdomain**.
+3. Click **Verify**.
+4. Netlify will either:
+   - **Option 1 – Recommend nameservers:** It will show 4 nameservers (e.g. `dns1.p01.nsone.net`, `dns2.p01.nsone.net`, …). Use **Part B1** below.
+   - **Option 2 – Recommend DNS records:** It will show an **A** record and a **CNAME** for `www`. Use **Part B2** below.
+
+**Part B1 – Use Netlify nameservers (recommended)**
+
+1. In **Hostinger**: Domains → **DNS / Nameservers** → select **passvitian.in**.
+2. Click **Change Nameservers**.
+3. Choose **Custom nameservers** and replace the current ones with the **exact** nameservers Netlify gave you (e.g. `dns1.p01.nsone.net`, `dns2.p01.nsone.net`, etc.). Add all 4 if Netlify shows 4.
+4. Save. DNS can take from a few minutes up to 24–48 hours to propagate.
+5. Back in **Netlify** → Domain management, click **Verify DNS configuration** (or wait for Netlify to detect it). Add **www.passvitian.in** as well if Netlify suggests it.
+
+**Part B2 – Keep Hostinger DNS (A + CNAME records)**
+
+1. In **Netlify**, note the values it shows, for example:
+   - **A** record: **Name** `@`, **Value** `75.2.60.5` (Netlify’s load balancer; your value may differ).
+   - **CNAME** record: **Name** `www`, **Value** `your-site-name.netlify.app`.
+2. In **Hostinger**: Domains → **DNS / Nameservers** → **Manage DNS records** for **passvitian.in**.
+3. **Root domain (@):**
+   - Edit the existing **A** record for **Name** `@` and set **Points to** to the IP Netlify gave you (e.g. `75.2.60.5`).  
+   - Or delete the current A record and **Add New Record**: Type **A**, Name **@**, Points to **&lt;Netlify IP&gt;**, TTL 14400 (or default).
+4. **www:**
+   - Edit the existing **CNAME** for **Name** `www` and set **Content** to your Netlify hostname (e.g. `passvitian-in.netlify.app`).  
+   - Or delete the old CNAME and **Add New Record**: Type **CNAME**, Name **www**, Content **&lt;your-site&gt;.netlify.app**, TTL 14400.
+5. Save. Wait a few minutes (up to 24–48 hours for full propagation).
+6. In **Netlify** → Domain management, click **Verify DNS configuration**. Add **www.passvitian.in** if Netlify asks for it.
+
+**Part C – HTTPS**
+
+- After DNS verifies, Netlify will issue an SSL certificate for **passvitian.in** and **www.passvitian.in**.
+- Open **https://passvitian.in** and **https://www.passvitian.in** to confirm.
+
+---
+
+*Generic steps (other registrars):*
+
 1. **Add domain in Netlify**  
    Site → **Domain management** → **Add custom domain** (e.g. `passvitian.com` or `papers.yourdomain.com`).
 
