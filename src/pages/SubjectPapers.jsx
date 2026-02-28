@@ -77,24 +77,28 @@ export default function SubjectPapers() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {subjectPapers.map((p) => (
-                <div
-                  key={p.id}
-                  className="bg-white border border-teal-200 rounded-xl p-5 shadow-sm hover:shadow-md transition text-center"
-                >
-                  <p className="font-bold text-gray-900">{p.paperName || 'Paper'}</p>
-                  <p className="text-sm text-gray-600 mt-1">{p.subjectName}</p>
-                  <a
-                    href={p.secure_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-flex items-center justify-center gap-2 w-full px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition"
+              {subjectPapers.map((p) => {
+                const suggestedName = (p.paperName || 'paper').replace(/[^a-zA-Z0-9._-]/g, '_') + ((p.secure_url || '').toLowerCase().endsWith('.pdf') ? '.pdf' : '')
+                return (
+                  <div
+                    key={p.id}
+                    className="bg-white border border-teal-200 rounded-xl p-5 shadow-sm hover:shadow-md transition text-center"
                   >
-                    <FileDown className="w-4 h-4" />
-                    GET PDF
-                  </a>
-                </div>
-              ))}
+                    <p className="font-bold text-gray-900">{p.paperName || 'Paper'}</p>
+                    <p className="text-sm text-gray-600 mt-1">{p.subjectName}</p>
+                    <a
+                      href={p.secure_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download={suggestedName || undefined}
+                      className="mt-4 inline-flex items-center justify-center gap-2 w-full px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition"
+                    >
+                      <FileDown className="w-4 h-4" />
+                      GET PDF
+                    </a>
+                  </div>
+                )
+              })}
             </div>
           )}
         </>
