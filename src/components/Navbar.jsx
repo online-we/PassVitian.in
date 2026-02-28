@@ -11,8 +11,8 @@ export default function Navbar() {
       <nav className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14 sm:h-16">
         <Link to="/" className="flex items-center gap-2 shrink-0">
           <span className="font-bold text-lg">
-            <span className="text-pink-400">pass</span>
-            <span className="text-white">vitian</span>
+            <span className="text-pink-400">Pass</span>
+            <span className="text-white">Vitian</span>
           </span>
         </Link>
         <div className="flex items-center gap-1 sm:gap-2">
