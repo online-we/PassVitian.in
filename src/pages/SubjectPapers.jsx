@@ -4,6 +4,27 @@ import { Upload, FileDown, ArrowLeft } from 'lucide-react'
 import { usePapers } from '../context/PapersContext'
 import UploadModal from '../components/UploadModal'
 
+function formatPaperLabel(rawName) {
+  if (!rawName) return 'Paper'
+  const date = new Date(rawName)
+  if (!Number.isNaN(date.getTime())) {
+    return date.toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    })
+  }
+  return rawName
+}
+
+function buildTitle(paper) {
+  const dateLabel = formatPaperLabel(paper.paperName)
+  if (paper.paperType) {
+    return `${paper.paperType} – ${dateLabel}`
+  }
+  return dateLabel
+}
+
 export default function SubjectPapers() {
   const { subjectCode } = useParams()
   const { papers, loading, error } = usePapers()
@@ -12,9 +33,20 @@ export default function SubjectPapers() {
   const subjectPapers = useMemo(() => {
     const code = subjectCode?.toUpperCase().trim()
     if (!code) return []
-    return papers.filter(
+    const filtered = papers.filter(
       (p) => p.subjectCode?.toUpperCase().trim() === code
     )
+    // Sort by exam date: latest first (newest at top)
+    return [...filtered].sort((a, b) => {
+      const dateA = new Date(a.paperName || 0).getTime()
+      const dateB = new Date(b.paperName || 0).getTime()
+      const validA = !Number.isNaN(dateA)
+      const validB = !Number.isNaN(dateB)
+      if (!validA && !validB) return 0
+      if (!validA) return 1
+      if (!validB) return -1
+      return dateB - dateA
+    })
   }, [papers, subjectCode])
 
   const subjectName = useMemo(() => {
@@ -84,7 +116,9 @@ export default function SubjectPapers() {
                     key={p.id}
                     className="bg-white border border-teal-200 rounded-xl p-5 shadow-sm hover:shadow-md transition text-center"
                   >
-                    <p className="font-bold text-gray-900">{p.paperName || 'Paper'}</p>
+                    <p className="font-bold text-gray-900">
+                      {buildTitle(p)}
+                    </p>
                     <p className="text-sm text-gray-600 mt-1">{p.subjectName}</p>
                     <a
                       href={p.secure_url}

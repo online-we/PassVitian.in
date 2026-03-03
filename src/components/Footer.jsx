@@ -13,8 +13,8 @@ export default function Footer() {
             className="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors"
           >
             <span className="font-semibold">
-              <span className="text-pink-500">pass</span>
-              <span className="text-primary">vitian</span>
+              <span className="text-pink-500">Pass</span>
+              <span className="text-primary">Vitian</span>
             </span>
           </Link>
           <nav className="flex items-center gap-6 text-sm text-gray-600">
