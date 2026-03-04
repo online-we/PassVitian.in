@@ -6,13 +6,15 @@ import UploadModal from '../components/UploadModal'
 
 function getSubjectsFromPapers(papers) {
   const map = new Map()
-  papers.forEach((p) => {
-    if (!p.subjectCode || !p.subjectName) return
+  // Walk from oldest to newest so the very first subject name wins
+  for (let i = papers.length - 1; i >= 0; i -= 1) {
+    const p = papers[i]
+    if (!p.subjectCode || !p.subjectName) continue
     const key = p.subjectCode.toUpperCase().trim()
     if (!map.has(key)) {
       map.set(key, { subjectCode: key, subjectName: p.subjectName.trim() })
     }
-  })
+  }
   return Array.from(map.values()).sort((a, b) => a.subjectCode.localeCompare(b.subjectCode))
 }
 
