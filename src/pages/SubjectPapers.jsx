@@ -128,7 +128,7 @@ export default function SubjectPapers() {
                       className="mt-4 inline-flex items-center justify-center gap-2 w-full px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition"
                     >
                       <FileDown className="w-4 h-4" />
-                      GET PDF
+                      Open PDF
                     </a>
                   </div>
                 )
