@@ -2,13 +2,13 @@ import { useState, useRef, useEffect } from 'react'
 import { X, Upload, Loader2 } from 'lucide-react'
 import { usePapers } from '../context/PapersContext'
 
-const PAPER_TYPES = ['MTE', 'TEE']
+const PAPER_TYPES = ['CAT 1', 'CAT 2', 'TEE']
 
 export default function UploadModal({ open, onClose, prefill = {} }) {
   const { upload, refresh } = usePapers()
   const [subjectCode, setSubjectCode] = useState(prefill.subjectCode ?? '')
   const [subjectName, setSubjectName] = useState(prefill.subjectName ?? '')
-  const [paperType, setPaperType] = useState(prefill.paperType ?? 'MTE')
+  const [paperType, setPaperType] = useState(prefill.paperType ?? 'CAT 1')
   const [paperName, setPaperName] = useState(prefill.paperName ?? '')
   const [file, setFile] = useState(null)
   const [uploading, setUploading] = useState(false)
@@ -19,7 +19,7 @@ export default function UploadModal({ open, onClose, prefill = {} }) {
     if (open) {
       setSubjectCode(prefill.subjectCode ?? '')
       setSubjectName(prefill.subjectName ?? '')
-      setPaperType(prefill.paperType ?? 'MTE')
+      setPaperType(prefill.paperType ?? 'CAT 1')
       setPaperName(prefill.paperName ?? '')
       setFile(null)
       setError('')

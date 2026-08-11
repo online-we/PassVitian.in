@@ -13,15 +13,7 @@ export function getUploadUrl(isPdf) {
   return isPdf ? UPLOAD_URL_RAW : UPLOAD_URL_IMAGE
 }
 
-export async function uploadFile(file, metadata) {
-  const isPdf = file.type === 'application/pdf'
-  const url = getUploadUrl(isPdf)
-  const preset = isPdf ? UPLOAD_PRESET_RAW : UPLOAD_PRESET_IMAGE
-  const formData = new FormData()
-  formData.append('file', file)
-  formData.append('upload_preset', preset)
-  formData.append('context', `subjectCode=${metadata.subjectCode}|subjectName=${encodeURIComponent(metadata.subjectName)}|paperType=${metadata.paperType}|paperName=${encodeURIComponent(metadata.paperName)}`)
-
+async function postToCloudinary(url, formData) {
   const res = await fetch(url, {
     method: 'POST',
     body: formData,
@@ -38,4 +30,28 @@ export async function uploadFile(file, metadata) {
     throw new Error(message)
   }
   return JSON.parse(text)
+}
+
+export async function uploadFile(file, metadata) {
+  const isPdf = file.type === 'application/pdf'
+  const url = getUploadUrl(isPdf)
+  const preset = isPdf ? UPLOAD_PRESET_RAW : UPLOAD_PRESET_IMAGE
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('upload_preset', preset)
+  formData.append('context', `subjectCode=${metadata.subjectCode}|subjectName=${encodeURIComponent(metadata.subjectName)}|paperType=${metadata.paperType}|paperName=${encodeURIComponent(metadata.paperName)}`)
+  return postToCloudinary(url, formData)
+}
+
+export async function uploadBicycle(file, metadata) {
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('upload_preset', UPLOAD_PRESET_IMAGE)
+  formData.append('folder', 'bicycles')
+  formData.append(
+    'context',
+    `listingType=bicycle|price=${encodeURIComponent(metadata.price)}|usageDuration=${encodeURIComponent(metadata.usageDuration)}|contact=${encodeURIComponent(metadata.contact)}`
+  )
+  formData.append('tags', 'bicycle')
+  return postToCloudinary(UPLOAD_URL_IMAGE, formData)
 }

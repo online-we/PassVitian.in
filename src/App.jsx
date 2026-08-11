@@ -3,6 +3,7 @@ import Layout from './components/Layout'
 import Home from './pages/Home'
 import Papers from './pages/Papers'
 import SubjectPapers from './pages/SubjectPapers'
+import Bicycle from './pages/Bicycle'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/papers" element={<Papers />} />
         <Route path="/papers/:subjectCode" element={<SubjectPapers />} />
+        <Route path="/bicycle" element={<Bicycle />} />
       </Route>
     </Routes>
   )

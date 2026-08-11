@@ -1,51 +1,81 @@
-import { Link } from 'react-router-dom'
-import heroCardImage from '../assets/hero-card.png'
+import { ArrowRight } from 'lucide-react'
+import PageContainer from '../components/PageContainer'
+
+const FEATURES = [
+  { label: 'Projects', detail: 'Build IT job makret relevent projects from your first year of college/university' },
+  { label: 'Certificates', detail: 'A few, valuable and alligned with your targeted job roles certificates attract more job offers' },
+  { label: 'Experiences', detail: 'Get a few experiences, either through internships, freelancing, or side projects, that are relevant to your targeted job roles. ScalePBG helps you get these opportunities at first, based on your skills and interests.' },
+]
+
+function FeatureList({ className = '' }) {
+  return (
+    <div className={`flex flex-col gap-4 sm:gap-5 ${className}`}>
+      {FEATURES.map((item) => (
+        <div
+          key={item.label}
+          className="border-l-2 border-primary/30 pl-4 py-1"
+        >
+          <p className="text-base sm:text-lg font-semibold text-black">{item.label}</p>
+          <p className="text-sm text-slate-500 mt-1 leading-relaxed">{item.detail}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
 
 export default function Home() {
   return (
-    <section className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-      <div className="grid md:grid-cols-2 gap-0 items-stretch rounded-2xl overflow-hidden border border-gray-200 shadow-lg">
-        {/* Left: Hero image card */}
-        <div className="bg-gradient-to-r from-gray-50 to-white min-h-[200px] sm:min-h-[260px] md:min-h-0 flex items-center justify-center">
-          <img
-            src={heroCardImage}
-            alt="Mid-term & Term-end for VIT Bhopal Campus"
-            className="w-full h-full min-h-[200px] sm:min-h-[260px] md:min-h-0 object-contain object-center select-none"
-            onError={(e) => {
-              e.target.style.display = 'none'
-              e.target.nextElementSibling?.classList.remove('hidden')
-            }}
-          />
-          <div className="hidden text-center p-6 sm:p-8 text-gray-500">
-            <p className="text-lg font-semibold text-primary">Mid-term & Term-end</p>
-            <p className="text-primary underline mt-1">For VIT Bhopal Campus</p>
-          </div>
-        </div>
+    <div className="relative w-full flex-1 flex flex-col overflow-hidden">
+      <div
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(0,31,92,0.06),_transparent_55%),linear-gradient(135deg,#f8fafc_0%,#ffffff_45%,#eef2f7_100%)]"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 opacity-[0.35]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(15,23,42,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.04) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }}
+        aria-hidden="true"
+      />
 
-        {/* Right: CTA card */}
-        <div className="bg-white border-t md:border-t-0 md:border-l border-gray-200 p-6 sm:p-8 h-full flex flex-col">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-            Previous Semester Papers
-          </h1>
-          <p className="mt-3 text-gray-600">
-            Practicing past papers is the best way to prepare for any exam.
-          </p>
-          <ul className="mt-4 space-y-2">
-            {['Mid-term papers', 'Term-end papers', 'Projects & Assignments'].map((item) => (
-              <li key={item} className="flex items-center gap-2 text-gray-700">
-                <span className="text-primary">✓</span>
-                {item}
-              </li>
-            ))}
-          </ul>
-          <Link
-            to="/papers"
-            className="mt-6 inline-flex items-center justify-center px-5 h-10 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-light transition shadow-sm w-fit"
-          >
-            View Papers
-          </Link>
+      <PageContainer className="relative flex-1 py-10 sm:py-14 lg:py-16">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10 lg:gap-24">
+          <div className="max-w-2xl">
+            <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500 mb-4">
+              Featured partner
+            </p>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-black inline-flex items-baseline gap-2 flex-wrap">
+              ScalePBG
+              <span className="text-sm sm:text-base font-medium text-slate-700 tracking-normal">
+                only for Engineers
+              </span>
+            </h1>
+            <p className="mt-4 text-lg sm:text-xl text-slate-700 font-medium leading-snug">
+              Turn AI into leverage for the career you deserve.
+            </p>
+            <p className="mt-3 text-sm sm:text-base text-slate-500 leading-relaxed max-w-xl">
+              There are 100s of job roles in the market and 1000s of new job roles are being created every year, but if you are not aware of the latest job roles and the skills required for them, and not chasing for specific job roles, then you are likely to be unemployed. 
+            </p>
+            <div className="mt-7">
+              <a
+                href="https://scalepbg.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 h-11 bg-black text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition shadow-sm"
+              >
+                Start for Free
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+
+            <FeatureList className="mt-8 lg:hidden" />
+          </div>
+
+          <FeatureList className="hidden lg:flex shrink-0 w-[300px] xl:w-[360px] xl:mr-4 2xl:mr-8" />
         </div>
-      </div>
-    </section>
+      </PageContainer>
+    </div>
   )
 }

@@ -1,12 +1,24 @@
 import { useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { Search, FileText, Upload } from 'lucide-react'
 import { usePapers } from '../context/PapersContext'
 import UploadModal from '../components/UploadModal'
+import PageContainer from '../components/PageContainer'
+
+const TYPE_TITLES = {
+  'CAT 1': 'CAT 1 Papers',
+  'CAT 2': 'CAT 2 Papers',
+  MTE: 'Mid-term Papers (MTE)',
+  TEE: 'Term-end Papers (TEE)',
+}
+
+function matchesPaperType(paperType, filterType) {
+  if (!filterType) return true
+  return (paperType || '').trim().toLowerCase() === filterType.trim().toLowerCase()
+}
 
 function getSubjectsFromPapers(papers) {
   const map = new Map()
-  // Walk from oldest to newest so the very first subject name wins
   for (let i = papers.length - 1; i >= 0; i -= 1) {
     const p = papers[i]
     if (!p.subjectCode || !p.subjectName) continue
@@ -20,10 +32,18 @@ function getSubjectsFromPapers(papers) {
 
 export default function Papers() {
   const { papers, loading, error } = usePapers()
+  const [searchParams] = useSearchParams()
+  const paperTypeFilter = searchParams.get('type')?.trim() || ''
   const [search, setSearch] = useState('')
   const [uploadOpen, setUploadOpen] = useState(false)
 
-  const subjects = useMemo(() => getSubjectsFromPapers(papers), [papers])
+  const typedPapers = useMemo(
+    () => papers.filter((p) => matchesPaperType(p.paperType, paperTypeFilter)),
+    [papers, paperTypeFilter]
+  )
+
+  const subjects = useMemo(() => getSubjectsFromPapers(typedPapers), [typedPapers])
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
     if (!q) return subjects
@@ -34,8 +54,28 @@ export default function Papers() {
     )
   }, [subjects, search])
 
+  const pageTitle = paperTypeFilter
+    ? TYPE_TITLES[paperTypeFilter] || `${paperTypeFilter} Papers`
+    : 'All Subjects'
+
+  const subjectLink = (subjectCode) => {
+    const base = `/papers/${encodeURIComponent(subjectCode)}`
+    return paperTypeFilter
+      ? `${base}?type=${encodeURIComponent(paperTypeFilter)}`
+      : base
+  }
+
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+    <PageContainer className="py-6 sm:py-8">
+      <div className="mb-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{pageTitle}</h1>
+        {paperTypeFilter && (
+          <p className="text-sm text-gray-600 mt-1">
+            Showing subjects that have {paperTypeFilter} papers uploaded.
+          </p>
+        )}
+      </div>
+
       <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between mb-6">
         <div className="flex flex-1 gap-2 max-w-md">
           <input
@@ -70,28 +110,32 @@ export default function Papers() {
         </div>
       )}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="h-40 bg-gray-100 rounded-xl animate-pulse" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
           {filtered.length === 0 ? (
             <div className="col-span-full text-center py-12 text-gray-500">
               <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
-              <p>No subjects yet. Upload the first paper to create a subject.</p>
+              <p>
+                {paperTypeFilter
+                  ? `No ${paperTypeFilter} papers yet. Upload one to get started.`
+                  : 'No subjects yet. Upload the first paper to create a subject.'}
+              </p>
             </div>
           ) : (
             filtered.map((s) => (
               <div
                 key={s.subjectCode}
-                className="bg-white border border-primary/20 rounded-xl p-5 shadow-sm hover:shadow-md transition text-center"
+                className="bg-white border border-primary/20 rounded-xl p-5 shadow-sm text-center"
               >
                 <p className="font-bold text-gray-900">{s.subjectCode}</p>
                 <p className="text-sm text-gray-600 mt-1 line-clamp-2">{s.subjectName}</p>
                 <Link
-                  to={`/papers/${encodeURIComponent(s.subjectCode)}`}
+                  to={subjectLink(s.subjectCode)}
                   className="mt-4 inline-block px-5 py-2 bg-primary text-white text-sm font-medium rounded-full hover:bg-primary-light transition"
                 >
                   papers
@@ -102,7 +146,11 @@ export default function Papers() {
         </div>
       )}
 
-      <UploadModal open={uploadOpen} onClose={() => setUploadOpen(false)} prefill={{}} />
-    </div>
+      <UploadModal
+        open={uploadOpen}
+        onClose={() => setUploadOpen(false)}
+        prefill={paperTypeFilter ? { paperType: paperTypeFilter } : {}}
+      />
+    </PageContainer>
   )
 }

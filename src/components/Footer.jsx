@@ -6,7 +6,7 @@ export default function Footer() {
 
   return (
     <footer className="mt-auto border-t border-gray-200 bg-gray-50/80">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16 py-8">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <Link
             to="/"
@@ -34,9 +34,18 @@ export default function Footer() {
             </Link>
           </nav>
         </div>
-        <div className="mt-6 pt-6 border-t border-gray-200 text-center sm:text-left">
+        <div className="mt-6 pt-6 border-t border-gray-200 text-center sm:text-left space-y-2">
           <p className="text-sm text-gray-500">
             © {currentYear} PassVitian. Past papers for VIT Bhopal.
+          </p>
+          <p className="text-sm text-gray-500">
+            Contact here:{' '}
+            <a
+              href="mailto:firojhere7s@gmail.com"
+              className="text-primary hover:underline"
+            >
+              firojhere7s@gmail.com
+            </a>
           </p>
         </div>
       </div>

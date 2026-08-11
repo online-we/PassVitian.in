@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useSearchParams } from 'react-router-dom'
 import { Upload, FileDown, ArrowLeft } from 'lucide-react'
 import { usePapers } from '../context/PapersContext'
 import UploadModal from '../components/UploadModal'
+import PageContainer from '../components/PageContainer'
 
 function formatPaperLabel(rawName) {
   if (!rawName) return 'Paper'
@@ -25,8 +26,15 @@ function buildTitle(paper) {
   return dateLabel
 }
 
+function matchesPaperType(paperType, filterType) {
+  if (!filterType) return true
+  return (paperType || '').trim().toLowerCase() === filterType.trim().toLowerCase()
+}
+
 export default function SubjectPapers() {
   const { subjectCode } = useParams()
+  const [searchParams] = useSearchParams()
+  const paperTypeFilter = searchParams.get('type')?.trim() || ''
   const { papers, loading, error } = usePapers()
   const [uploadOpen, setUploadOpen] = useState(false)
 
@@ -34,9 +42,10 @@ export default function SubjectPapers() {
     const code = subjectCode?.toUpperCase().trim()
     if (!code) return []
     const filtered = papers.filter(
-      (p) => p.subjectCode?.toUpperCase().trim() === code
+      (p) =>
+        p.subjectCode?.toUpperCase().trim() === code &&
+        matchesPaperType(p.paperType, paperTypeFilter)
     )
-    // Sort by exam date: latest first (newest at top)
     return [...filtered].sort((a, b) => {
       const dateA = new Date(a.paperName || 0).getTime()
       const dateB = new Date(b.paperName || 0).getTime()
@@ -47,28 +56,35 @@ export default function SubjectPapers() {
       if (!validB) return -1
       return dateB - dateA
     })
-  }, [papers, subjectCode])
+  }, [papers, subjectCode, paperTypeFilter])
 
   const subjectName = useMemo(() => {
-    return subjectPapers[0]?.subjectName || ''
-  }, [subjectPapers])
+    if (subjectPapers[0]?.subjectName) return subjectPapers[0].subjectName
+    const code = subjectCode?.toUpperCase().trim()
+    const any = papers.find((p) => p.subjectCode?.toUpperCase().trim() === code)
+    return any?.subjectName || ''
+  }, [subjectPapers, papers, subjectCode])
+
+  const backTo = paperTypeFilter
+    ? `/papers?type=${encodeURIComponent(paperTypeFilter)}`
+    : '/papers'
 
   const prefill = useMemo(
     () => ({
       subjectCode: subjectCode?.trim() ?? '',
-      subjectName: subjectPapers[0]?.subjectName ?? '',
-      paperType: 'MTE',
+      subjectName: subjectName || '',
+      paperType: paperTypeFilter || 'CAT 1',
       paperName: '',
     }),
-    [subjectCode, subjectPapers]
+    [subjectCode, subjectName, paperTypeFilter]
   )
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+    <PageContainer className="py-6 sm:py-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <Link
-            to="/papers"
+            to={backTo}
             className="inline-flex items-center gap-2 text-primary font-medium hover:underline mb-2"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -77,6 +93,7 @@ export default function SubjectPapers() {
           <h1 className="text-xl font-bold text-gray-900">
             {subjectCode}
             {subjectName ? ` – ${subjectName}` : ''}
+            {paperTypeFilter ? ` · ${paperTypeFilter}` : ''}
           </h1>
         </div>
         <button
@@ -96,7 +113,7 @@ export default function SubjectPapers() {
       )}
 
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
             <div key={i} className="h-36 bg-gray-100 rounded-xl animate-pulse" />
           ))}
@@ -105,20 +122,24 @@ export default function SubjectPapers() {
         <>
           {subjectPapers.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
-              <p>No papers for this subject yet. Upload the first one.</p>
+              <p>
+                {paperTypeFilter
+                  ? `No ${paperTypeFilter} papers for this subject yet. Upload the first one.`
+                  : 'No papers for this subject yet. Upload the first one.'}
+              </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
               {subjectPapers.map((p) => {
-                const suggestedName = (p.paperName || 'paper').replace(/[^a-zA-Z0-9._-]/g, '_') + ((p.secure_url || '').toLowerCase().endsWith('.pdf') ? '.pdf' : '')
+                const suggestedName =
+                  (p.paperName || 'paper').replace(/[^a-zA-Z0-9._-]/g, '_') +
+                  ((p.secure_url || '').toLowerCase().endsWith('.pdf') ? '.pdf' : '')
                 return (
                   <div
                     key={p.id}
-                    className="bg-white border border-teal-200 rounded-xl p-5 shadow-sm hover:shadow-md transition text-center"
+                    className="bg-white border border-teal-200 rounded-xl p-5 shadow-sm text-center"
                   >
-                    <p className="font-bold text-gray-900">
-                      {buildTitle(p)}
-                    </p>
+                    <p className="font-bold text-gray-900">{buildTitle(p)}</p>
                     <p className="text-sm text-gray-600 mt-1">{p.subjectName}</p>
                     <a
                       href={p.secure_url}
@@ -143,6 +164,6 @@ export default function SubjectPapers() {
         onClose={() => setUploadOpen(false)}
         prefill={prefill}
       />
-    </div>
+    </PageContainer>
   )
 }
