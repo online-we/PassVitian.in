@@ -46,7 +46,7 @@ export default function Home() {
             <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500 mb-4">
               Featured partner
             </p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-black inline-flex items-baseline gap-2 flex-wrap">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-black flex flex-wrap items-baseline gap-x-2 gap-y-1 max-w-full">
               ScalePBG
               <span className="text-sm sm:text-base font-medium text-slate-700 tracking-normal">
                 only for Engineers

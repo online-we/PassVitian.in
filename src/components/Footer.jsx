@@ -5,7 +5,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="mt-auto border-t border-gray-200 bg-gray-50/80">
+    <footer className="mt-auto border-t border-gray-200 bg-gray-50/80 pb-[env(safe-area-inset-bottom)]">
       <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16 py-8">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <Link
@@ -42,7 +42,7 @@ export default function Footer() {
             Contact here:{' '}
             <a
               href="mailto:firojhere7s@gmail.com"
-              className="text-primary hover:underline"
+              className="text-primary hover:underline break-all"
             >
               firojhere7s@gmail.com
             </a>

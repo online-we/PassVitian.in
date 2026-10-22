@@ -86,7 +86,7 @@ export default function UploadModal({ open, onClose, prefill = {} }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] bg-black/50"
       onClick={handleClose}
       onKeyDown={(e) => e.key === 'Escape' && handleClose()}
       role="dialog"
@@ -94,7 +94,7 @@ export default function UploadModal({ open, onClose, prefill = {} }) {
       aria-labelledby="upload-modal-title"
     >
       <div
-        className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[min(90dvh,100%)] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
         onFocus={() => {}}
       >
@@ -120,7 +120,7 @@ export default function UploadModal({ open, onClose, prefill = {} }) {
               value={subjectCode}
               onChange={(e) => setSubjectCode(e.target.value)}
               placeholder="e.g. PHY1002"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+              className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg outline-none shadow-none focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300"
             />
           </div>
           <div>
@@ -130,7 +130,7 @@ export default function UploadModal({ open, onClose, prefill = {} }) {
               value={subjectName}
               onChange={(e) => setSubjectName(e.target.value)}
               placeholder="e.g. Engineering Physics"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+              className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg outline-none shadow-none focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300"
             />
           </div>
           <div>
@@ -138,7 +138,7 @@ export default function UploadModal({ open, onClose, prefill = {} }) {
             <select
               value={paperType}
               onChange={(e) => setPaperType(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+              className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg outline-none shadow-none focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300"
             >
               {PAPER_TYPES.map((t) => (
                 <option key={t} value={t}>{t}</option>
@@ -153,7 +153,7 @@ export default function UploadModal({ open, onClose, prefill = {} }) {
               type="date"
               value={paperName}
               onChange={(e) => setPaperName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+              className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg outline-none shadow-none focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300"
             />
           </div>
           <div>
@@ -163,24 +163,24 @@ export default function UploadModal({ open, onClose, prefill = {} }) {
               type="file"
               accept=".pdf,image/*"
               onChange={handleFileChange}
-              className="w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary file:text-white file:font-medium"
+              className="block w-full max-w-full text-base sm:text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary file:text-white file:font-medium"
             />
             {file && <p className="mt-1 text-sm text-gray-500">{file.name}</p>}
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
-          <div className="flex gap-2 pt-2">
+          <div className="flex gap-2 pt-2 min-w-0">
             <button
               type="button"
               onClick={handleClose}
               disabled={uploading}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+              className="flex-1 min-w-0 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={uploading}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-light disabled:opacity-50 font-medium"
+              className="flex-1 min-w-0 flex items-center justify-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-light disabled:opacity-50 font-medium"
             >
               {uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
               Done

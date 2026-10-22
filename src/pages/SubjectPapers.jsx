@@ -81,7 +81,7 @@ export default function SubjectPapers() {
 
   return (
     <PageContainer className="py-6 sm:py-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 min-w-0">
         <div>
           <Link
             to={backTo}
@@ -90,7 +90,7 @@ export default function SubjectPapers() {
             <ArrowLeft className="w-4 h-4" />
             Back to subjects
           </Link>
-          <h1 className="text-xl font-bold text-gray-900">
+          <h1 className="text-xl font-bold text-gray-900 break-words">
             {subjectCode}
             {subjectName ? ` – ${subjectName}` : ''}
             {paperTypeFilter ? ` · ${paperTypeFilter}` : ''}
@@ -139,8 +139,8 @@ export default function SubjectPapers() {
                     key={p.id}
                     className="bg-white border border-teal-200 rounded-xl p-5 shadow-sm text-center"
                   >
-                    <p className="font-bold text-gray-900">{buildTitle(p)}</p>
-                    <p className="text-sm text-gray-600 mt-1">{p.subjectName}</p>
+                    <p className="font-bold text-gray-900 break-words">{buildTitle(p)}</p>
+                    <p className="text-sm text-gray-600 mt-1 break-words">{p.subjectName}</p>
                     <a
                       href={p.secure_url}
                       target="_blank"

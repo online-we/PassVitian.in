@@ -5,8 +5,15 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
   body {
     @apply bg-white text-gray-900 antialiased;
+  }
+  input,
+  select,
+  textarea {
+    min-width: 0;
+    max-width: 100%;
   }
 }

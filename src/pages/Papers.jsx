@@ -76,18 +76,18 @@ export default function Papers() {
         )}
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between mb-6">
-        <div className="flex flex-1 gap-2 max-w-md">
+      <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between mb-6 min-w-0">
+        <div className="flex min-w-0 flex-1 gap-2 max-w-md">
           <input
             type="search"
             placeholder="Search courses..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+            className="min-w-0 flex-1 px-4 py-2 bg-white border border-gray-300 rounded-lg text-base outline-none shadow-none appearance-none focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
           />
           <button
             type="button"
-            className="px-4 py-2 bg-primary text-white rounded-lg font-medium flex items-center gap-2 shrink-0"
+            className="px-4 py-2 bg-primary text-white rounded-lg font-medium flex items-center gap-2 shrink-0 outline-none shadow-none hover:bg-primary active:bg-primary focus:outline-none focus:ring-0 focus:shadow-none"
             aria-label="Search"
           >
             <Search className="w-5 h-5" />
@@ -133,7 +133,7 @@ export default function Papers() {
                 className="bg-white border border-primary/20 rounded-xl p-5 shadow-sm text-center"
               >
                 <p className="font-bold text-gray-900">{s.subjectCode}</p>
-                <p className="text-sm text-gray-600 mt-1 line-clamp-2">{s.subjectName}</p>
+                <p className="text-sm text-gray-600 mt-1 line-clamp-2 break-words">{s.subjectName}</p>
                 <Link
                   to={subjectLink(s.subjectCode)}
                   className="mt-4 inline-block px-5 py-2 bg-primary text-white text-sm font-medium rounded-full hover:bg-primary-light transition"

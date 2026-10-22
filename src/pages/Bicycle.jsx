@@ -53,7 +53,7 @@ export default function Bicycle() {
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 text-primary mb-4">
                 <Bike className="w-7 h-7" />
               </div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Bicycle Marketplace</h1>
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 break-words">Bicycle Marketplace</h1>
               <p className="mt-3 text-gray-600">
                 list yours or find a deal.
               </p>
@@ -97,7 +97,7 @@ export default function Bicycle() {
 
         {mode === 'buy' && (
           <div>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 min-w-0">
               <div>
                 <button
                   type="button"

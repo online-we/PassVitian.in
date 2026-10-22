@@ -31,7 +31,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
       />
 
       <aside
-        className={`fixed top-0 left-0 bottom-0 w-72 bg-[#001845] text-white z-50 shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col ${
+        className={`fixed top-0 left-0 bottom-0 w-[min(18rem,calc(100vw-2.5rem))] bg-[#001845] text-white z-50 shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

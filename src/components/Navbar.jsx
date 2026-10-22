@@ -6,9 +6,9 @@ export default function Navbar({ toggleSidebar }) {
   const isPapers = location.pathname.startsWith('/papers')
 
   return (
-    <header className="bg-primary text-white shadow-md sticky top-0 z-40">
-      <nav className="w-full pl-2 pr-4 sm:pl-3 sm:pr-6 lg:pl-4 lg:pr-10 xl:pr-12 2xl:pr-16 flex items-center justify-between h-14 sm:h-16">
-        <div className="flex items-center gap-2 sm:gap-3">
+    <header className="bg-primary text-white shadow-md sticky top-0 z-40 pt-[env(safe-area-inset-top)]">
+      <nav className="w-full pl-2 pr-3 sm:pl-3 sm:pr-6 lg:pl-4 lg:pr-10 xl:pr-12 2xl:pr-16 flex items-center justify-between h-14 sm:h-16 min-w-0">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <button
             onClick={toggleSidebar}
             className="p-1 rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition focus:outline-none flex items-center justify-center -ml-0.5"
@@ -27,7 +27,7 @@ export default function Navbar({ toggleSidebar }) {
         <div className="flex items-center gap-1 sm:gap-2">
           <Link
             to="/papers"
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-md text-sm font-medium transition shrink-0 ${
               isPapers ? 'bg-white/15 text-white' : 'text-white/90 hover:bg-white/10'
             }`}
           >
