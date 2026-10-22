@@ -1,57 +1,39 @@
 /**
- * Cloudinary unsigned upload (no secret in frontend).
- * Requires VITE_CLOUDINARY_CLOUD_NAME and VITE_CLOUDINARY_UPLOAD_PRESET in .env
- * Optional: VITE_CLOUDINARY_UPLOAD_PRESET_RAW for PDFs if your preset is image-only
+ * New uploads go to Cloudflare R2 through /api/sign-upload.
+ * Existing Cloudinary files stay where they are and are still listed by the API.
  */
-const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-const UPLOAD_PRESET_IMAGE = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-const UPLOAD_PRESET_RAW = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET_RAW || import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-const UPLOAD_URL_IMAGE = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`
-const UPLOAD_URL_RAW = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/raw/upload`
 
-export function getUploadUrl(isPdf) {
-  return isPdf ? UPLOAD_URL_RAW : UPLOAD_URL_IMAGE
-}
-
-async function postToCloudinary(url, formData) {
-  const res = await fetch(url, {
+async function uploadToR2(file, kind, metadata) {
+  const signRes = await fetch('/api/sign-upload', {
     method: 'POST',
-    body: formData,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      kind,
+      contentType: file.type,
+      size: file.size,
+      metadata,
+    }),
   })
-  const text = await res.text()
-  if (!res.ok) {
-    let message = 'Upload failed'
-    try {
-      const json = JSON.parse(text)
-      if (json?.error?.message) message = json.error.message
-    } catch {
-      if (text) message = text
-    }
-    throw new Error(message)
+  const signed = await signRes.json().catch(() => ({}))
+  if (!signRes.ok) {
+    throw new Error(signed.error || 'Could not start upload')
   }
-  return JSON.parse(text)
+
+  const putRes = await fetch(signed.uploadUrl, {
+    method: 'PUT',
+    headers: { 'Content-Type': signed.contentType || file.type },
+    body: file,
+  })
+  if (!putRes.ok) {
+    throw new Error('Upload to storage failed. Please try again.')
+  }
+  return { secure_url: signed.publicUrl }
 }
 
 export async function uploadFile(file, metadata) {
-  const isPdf = file.type === 'application/pdf'
-  const url = getUploadUrl(isPdf)
-  const preset = isPdf ? UPLOAD_PRESET_RAW : UPLOAD_PRESET_IMAGE
-  const formData = new FormData()
-  formData.append('file', file)
-  formData.append('upload_preset', preset)
-  formData.append('context', `subjectCode=${metadata.subjectCode}|subjectName=${encodeURIComponent(metadata.subjectName)}|paperType=${metadata.paperType}|paperName=${encodeURIComponent(metadata.paperName)}`)
-  return postToCloudinary(url, formData)
+  return uploadToR2(file, 'paper', metadata)
 }
 
 export async function uploadBicycle(file, metadata) {
-  const formData = new FormData()
-  formData.append('file', file)
-  formData.append('upload_preset', UPLOAD_PRESET_IMAGE)
-  formData.append('folder', 'bicycles')
-  formData.append(
-    'context',
-    `listingType=bicycle|price=${encodeURIComponent(metadata.price)}|usageDuration=${encodeURIComponent(metadata.usageDuration)}|contact=${encodeURIComponent(metadata.contact)}`
-  )
-  formData.append('tags', 'bicycle')
-  return postToCloudinary(UPLOAD_URL_IMAGE, formData)
+  return uploadToR2(file, 'bicycle', metadata)
 }
